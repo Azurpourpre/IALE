@@ -1,0 +1,4 @@
+(executable
+ (public_name IALE)
+ (name main)
+ (libraries IALE))
