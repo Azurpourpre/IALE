@@ -1,5 +1,5 @@
 (test
  (name test_stage1_2)
- (libraries IALE alcotest)
- (deps (file %{project_root}/test/plc.xml))
+ (libraries IALE)
+ (deps (file %{project_root}/test/hello_world.xml))
 )
