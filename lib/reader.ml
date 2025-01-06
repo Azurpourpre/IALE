@@ -6,9 +6,6 @@ type s12_variable = {
   vartype : Types.iectype;
   initial_value: string option;
 };;
-type 'a tree = 
-| Node of 'a * 'a tree list
-| Leaf of 'a
 exception Invalid_input;;
 exception Invalid_argument;;
 exception Unexpected_value of string;;
@@ -116,12 +113,12 @@ let rec read_LD_array (file_data: Xml.xml list) : Types.component_LD IntMap.t =
     | Some d -> IntMap.add newel_id d (read_LD_array (List.tl file_data))
     | None -> read_LD_array (List.tl file_data)
 
-let read_LD (file_data: Xml.xml) : Types.component_LD tree list =
-  let rec build_tree (data: Types.component_LD IntMap.t) (rootID: int) : Types.component_LD tree =
+let read_LD (file_data: Xml.xml) : Types.component_LD Tree.t list =
+  let rec build_tree (data: Types.component_LD IntMap.t) (rootID: int) : Types.component_LD Tree.t =
     let rootelm = IntMap.find rootID data in
     match rootelm with
     | Types.LD_RIGHT_POWERRAIL _ -> Leaf rootelm
-    | _ -> Node (rootelm, IntMap.fold ( fun (key: int) (value: Types.component_LD) (acc: Types.component_LD tree list) ->
+    | _ -> Node (rootelm, IntMap.fold ( fun (key: int) (value: Types.component_LD) (acc: Types.component_LD Tree.t list) ->
       match value with
       | LD_LEFT_POWERRAIL -> acc
       | LD_RIGHT_POWERRAIL child_id  -> if List.mem rootID child_id then (build_tree data key) :: acc else acc
@@ -131,7 +128,7 @@ let read_LD (file_data: Xml.xml) : Types.component_LD tree list =
   in
   let ld_data = follow file_data ["project"; "types"; "pous"; "pou"; "body"; "LD"] in
   let ld_elm_arr = read_LD_array ld_data in 
-  IntMap.fold (fun (key: int) (value: Types.component_LD) (acc: Types.component_LD tree list) ->
+  IntMap.fold (fun (key: int) (value: Types.component_LD) (acc: Types.component_LD Tree.t list) ->
     match value with
     | LD_LEFT_POWERRAIL -> (build_tree ld_elm_arr key) :: acc
     | _ -> acc

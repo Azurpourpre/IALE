@@ -18,7 +18,7 @@ let rec check_varlist (l: IALE.Reader.s12_variable list) =
   );
   if List.length l > 1 then check_varlist (List.tl l)
 
-let rec print_components (l: IALE.Types.component_LD IALE.Reader.tree) (indent: int) = 
+let rec print_components (l: IALE.Types.component_LD IALE.Tree.t) (indent: int) = 
   let rec stringn (s: string) (n: int) = 
     if n = 0 then "" else (stringn s (n-1)) ^ s
   in
@@ -33,4 +33,4 @@ let () =
   let file_data = Xml.parse_file "hello_world.xml" in (
   check_varlist (IALE.Reader.read_variables file_data); print_endline "Variable corrects !";
   print_endline "\n\t***   LD Components   ***\n";
-  List.iter (fun (t: IALE.Types.component_LD IALE.Reader.tree) -> print_components t 0) (IALE.Reader.read_LD file_data))
+  List.iter (fun (t: IALE.Types.component_LD IALE.Tree.t) -> print_components t 0) (IALE.Reader.read_LD file_data))
