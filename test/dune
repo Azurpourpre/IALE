@@ -3,3 +3,8 @@
  (libraries IALE)
  (deps (file %{project_root}/test/hello_world.xml))
 )
+
+(test
+ (name test_ld)
+ (libraries IALE why3)
+)

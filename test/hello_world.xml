@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
-<project xmlns="http://www.plcopen.org/xml/tc6_0201" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:ns1="http://www.plcopen.org/xml/tc6.xsd">
+<project xmlns="http://www.plcopen.org/xml/tc6_0201" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:ns1="http://www.plcopen.org/xml/tc6_0201">
   <fileHeader companyName="Inconnu" productName="SansNom" productVersion="1" creationDateTime="2025-01-02T16:30:26"/>
-  <contentHeader name="SansNom" modificationDateTime="2025-01-02T16:35:51">
+  <contentHeader name="SansNom" modificationDateTime="2025-01-09T15:00:52">
     <coordinateInfo>
       <fbd>
         <scaling x="10" y="10"/>
@@ -20,7 +20,7 @@
       <pou name="hello_world" pouType="program">
         <interface>
           <localVars>
-            <variable name="i1">
+            <variable name="A">
               <type>
                 <BOOL/>
               </type>
@@ -28,7 +28,7 @@
                 <simpleValue value="true"/>
               </initialValue>
             </variable>
-            <variable name="i2">
+            <variable name="B">
               <type>
                 <BOOL/>
               </type>
@@ -36,12 +36,12 @@
                 <simpleValue value="false"/>
               </initialValue>
             </variable>
-            <variable name="i3">
+            <variable name="C">
               <type>
                 <BOOL/>
               </type>
             </variable>
-            <variable name="o1">
+            <variable name="O">
               <type>
                 <BOOL/>
               </type>
@@ -59,7 +59,7 @@
                 <relPosition x="10" y="60"/>
               </connectionPointOut>
             </leftPowerRail>
-            <contact localId="6" negated="false" width="20" height="20">
+            <contact localId="6" negated="false" width="21" height="20">
               <position x="120" y="80"/>
               <connectionPointIn>
                 <relPosition x="0" y="10"/>
@@ -69,11 +69,11 @@
                 </connection>
               </connectionPointIn>
               <connectionPointOut>
-                <relPosition x="20" y="10"/>
+                <relPosition x="21" y="10"/>
               </connectionPointOut>
-              <variable>i1</variable>
+              <variable>A</variable>
             </contact>
-            <contact localId="7" negated="false" width="20" height="20">
+            <contact localId="7" negated="false" width="21" height="20">
               <position x="120" y="120"/>
               <connectionPointIn>
                 <relPosition x="0" y="10"/>
@@ -83,11 +83,11 @@
                 </connection>
               </connectionPointIn>
               <connectionPointOut>
-                <relPosition x="20" y="10"/>
+                <relPosition x="21" y="10"/>
               </connectionPointOut>
-              <variable>i2</variable>
+              <variable>B</variable>
             </contact>
-            <contact localId="8" negated="false" width="20" height="20">
+            <contact localId="8" negated="false" width="21" height="20">
               <position x="170" y="100"/>
               <connectionPointIn>
                 <relPosition x="0" y="10"/>
@@ -95,33 +95,33 @@
                   <position x="170" y="110"/>
                   <position x="160" y="110"/>
                   <position x="160" y="130"/>
-                  <position x="140" y="130"/>
+                  <position x="141" y="130"/>
                 </connection>
                 <connection refLocalId="6">
                   <position x="170" y="110"/>
                   <position x="160" y="110"/>
                   <position x="160" y="90"/>
-                  <position x="140" y="90"/>
+                  <position x="141" y="90"/>
                 </connection>
               </connectionPointIn>
               <connectionPointOut>
-                <relPosition x="20" y="10"/>
+                <relPosition x="21" y="10"/>
               </connectionPointOut>
-              <variable>i3</variable>
+              <variable>C</variable>
             </contact>
-            <coil localId="9" negated="false" width="20" height="20">
+            <coil localId="9" negated="false" width="21" height="20">
               <position x="220" y="100"/>
               <connectionPointIn>
                 <relPosition x="0" y="10"/>
                 <connection refLocalId="8">
                   <position x="220" y="110"/>
-                  <position x="190" y="110"/>
+                  <position x="191" y="110"/>
                 </connection>
               </connectionPointIn>
               <connectionPointOut>
-                <relPosition x="20" y="10"/>
+                <relPosition x="21" y="10"/>
               </connectionPointOut>
-              <variable>o1</variable>
+              <variable>O</variable>
             </coil>
             <rightPowerRail localId="10" width="10" height="40">
               <position x="260" y="90"/>
