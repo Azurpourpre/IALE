@@ -1,4 +1,4 @@
 (library
  (name IALE)
- (libraries xml-light why3)
+ (libraries xml-light why3 re)
 )

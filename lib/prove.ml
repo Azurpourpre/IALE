@@ -1,21 +1,28 @@
-module StrMap = Map.Make(String);;
 open Why3;;
 exception Invalid_LD;;
 exception Invalid_var of string;;
 
+(* Additional operation on Why3.Term.term *)
 let term_t_eqv (a: Term.term) (b: Term.term) : Term.term =
   Term.t_or (Term.t_and a b) (Term.t_and (Term.t_not a) (Term.t_not b))
 
 let term_t_xor (a: Term.term) (b: Term.term) : Term.term = 
   Term.t_and (Term.t_or a b) (Term.t_not (Term.t_and a b))
 
-let transform_var (varlist: Reader.s12_variable list) : Term.lsymbol StrMap.t = 
-  let fold_func (acc: Term.lsymbol StrMap.t) (var: Reader.s12_variable) : Term.lsymbol StrMap.t =
+(* Define a "stack" for storing variables as why3 format *)
+module StrMap = Map.Make(String);;
+type stack_t = Term.lsymbol StrMap.t;;
+
+let find_var (name : string) (stack: stack_t) : Why3.Term.term = Why3.Term.ps_app (StrMap.find name stack) []
+
+(* main code *)
+let transform_var (varlist: Reader.s12_variable list) : stack_t = 
+  let fold_func (acc: stack_t) (var: Reader.s12_variable) : stack_t =
     acc |> StrMap.add var.name (Term.create_psymbol (Ident.id_fresh var.name) [])
   in
   List.fold_left fold_func StrMap.empty varlist 
 
-let rec transform_ld (prgm : Types.component_LD Tree.t) (stack : Term.lsymbol StrMap.t) : Term.term =
+let rec transform_ld (prgm : Types.component_LD Tree.t) (stack : stack_t) : Term.term =
   let recurse_children (children : Types.component_LD Tree.t list) : Term.term = Term.t_or_l (List.map (fun e -> transform_ld e stack) children) in
   match prgm with
   | Node (Types.LD_LEFT_POWERRAIL, children) -> recurse_children children
@@ -24,7 +31,7 @@ let rec transform_ld (prgm : Types.component_LD Tree.t) (stack : Term.lsymbol St
   | Leaf Types.LD_RIGHT_POWERRAIL _ -> Term.t_false
   | _ -> raise Invalid_LD
 
-let create_task (prgm: Term.term) (assertion : Term.term) (stack : Term.lsymbol StrMap.t) = 
+let create_task (prgm: Term.term) (assertion : Term.term) (stack : stack_t) = 
   let task = StrMap.fold (fun _ symbol acc_task : Task.task -> Task.add_param_decl acc_task symbol) stack None in
   let goal : Decl.prsymbol = Decl.create_prsymbol (Ident.id_fresh "Goal1") in
   Task.add_prop_decl task Decl.Pgoal goal (Term.t_implies prgm assertion)

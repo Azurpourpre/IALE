@@ -30,6 +30,7 @@ let rec print_components (l: IALE.Types.component_LD IALE.Tree.t) (indent: int) 
 
 
 let () =
+  print_endline "***   TEST XML PARSING   ***";
   let file_data = Xml.parse_file "hello_world.xml" in (
   check_varlist (IALE.Reader.read_variables file_data); print_endline "Variable corrects !";
   print_endline "\n\t***   LD Components   ***\n";

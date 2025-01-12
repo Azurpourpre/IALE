@@ -1,7 +1,12 @@
 (test
- (name test_stage1_2)
+ (name test_xml)
  (libraries IALE)
  (deps (file %{project_root}/test/hello_world.xml))
+)
+
+(test
+ (name test_assert)
+ (libraries IALE)
 )
 
 (test
