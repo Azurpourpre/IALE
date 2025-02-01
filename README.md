@@ -9,7 +9,7 @@ To build this project you will need [OCaml](https://ocaml.org/) and its package 
 ```
 opam install xml-light why3 re
 ```
-You will also need to install a (prover)[https://www.why3.org/doc/install.html#sec-provers] supported by Why3.
+You will also need to install a [prover supported by Why3](https://www.why3.org/doc/install.html#sec-provers).
 ```
 why3 config detect
 ```
