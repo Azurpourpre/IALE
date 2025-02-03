@@ -1,4 +1,4 @@
-module IntMap = Map.Make(Int);;
+open Utils;;
 type s12_variable = {
   name: string;
   address: string option;
@@ -68,7 +68,7 @@ let read_variables (file_data: Xml.xml) : s12_variable list =
 
 (* LD Reading & parsing *)
 
-let rec read_LD_array (file_data: Xml.xml list) : Types.component_LD IntMap.t = 
+let rec read_LD_body (file_data: Xml.xml list) : Types.component_LD IntMap.t = 
   if List.is_empty file_data then IntMap.empty else
   let get_varname (xml_data: Xml.xml list) : string = 
     let varname_finder (xml_elm: Xml.xml) : bool = 
@@ -110,26 +110,8 @@ let rec read_LD_array (file_data: Xml.xml list) : Types.component_LD IntMap.t =
       ) in
     let newel_id = int_of_string ( match parse_attr elattr "localId" with | None -> raise Invalid_input | Some s -> s ) in
     match newel with
-    | Some d -> IntMap.add newel_id d (read_LD_array (List.tl file_data))
-    | None -> read_LD_array (List.tl file_data)
-
-let read_LD (file_data: Xml.xml) : Types.component_LD Tree.t list =
-  let rec build_tree (data: Types.component_LD IntMap.t) (rootID: int) : Types.component_LD Tree.t =
-    let rootelm = IntMap.find rootID data in
-    match rootelm with
-    | Types.LD_RIGHT_POWERRAIL _ -> Leaf rootelm
-    | _ -> Node (rootelm, IntMap.fold ( fun (key: int) (value: Types.component_LD) (acc: Types.component_LD Tree.t list) ->
-      match value with
-      | LD_LEFT_POWERRAIL -> acc
-      | LD_RIGHT_POWERRAIL child_id  -> if List.mem rootID child_id then (build_tree data key) :: acc else acc
-      | LD_CONTACT {input = child_id ; _} -> if List.mem rootID child_id then (build_tree data key) :: acc else acc
-      | LD_COIL {input = child_id; _} -> if List.mem rootID child_id then (build_tree data key) :: acc else acc
-    ) data [])
-  in
-  let ld_data = follow file_data ["project"; "types"; "pous"; "pou"; "body"; "LD"] in
-  let ld_elm_arr = read_LD_array ld_data in 
-  IntMap.fold (fun (key: int) (value: Types.component_LD) (acc: Types.component_LD Tree.t list) ->
-    match value with
-    | LD_LEFT_POWERRAIL -> (build_tree ld_elm_arr key) :: acc
-    | _ -> acc
-  ) ld_elm_arr []
+    | Some d -> IntMap.add newel_id d (read_LD_body (List.tl file_data))
+    | None -> read_LD_body (List.tl file_data)
+  
+let read_LD (file_data: Xml.xml) : Types.component_LD IntMap.t = 
+  read_LD_body (follow file_data ["project"; "types"; "pous"; "pou"; "body"; "LD"])

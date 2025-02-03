@@ -1,3 +1,5 @@
+open Utils;;
+
 type token = 
     | TRUE
     | FALSE
@@ -29,7 +31,6 @@ let rec print_token_list (inp : token list) =
     match inp with
     | [] -> ()
     | a :: r -> print_string (string_of_token a ^ " ") ; print_token_list r
-
 
 let rec lexer (input : string) : token list = 
     let exception Lexer_error in
@@ -75,7 +76,13 @@ let rec lexer (input : string) : token list =
 
 open Why3;;
 
-let parser (lexbuf: token list) (var_stack: Prove.stack_t) : Term.term =
+let term_t_xor (a: Term.term) (b: Term.term) : Term.term =
+    Term.t_and (Term.t_or a b) (Term.t_not (Term.t_and a b))
+
+let term_t_eqv (a: Term.term) (b: Term.term) : Term.term =
+    Term.t_or (Term.t_and a b) (Term.t_and (Term.t_not a) (Term.t_not b))
+
+let parser (lexbuf: token list) (var_stack: stack_t) : Term.term =
     let exception Parser_error of string in
 
     let rec in_paren (tl: token list) : token list =
@@ -102,7 +109,7 @@ let parser (lexbuf: token list) (var_stack: Prove.stack_t) : Term.term =
                 match token, ast with
                 | TRUE, _ -> Some Term.t_true, 0
                 | FALSE, _ -> Some Term.t_false, 0
-                | IDENT name, _ -> Some (Prove.find_var name var_stack), 0
+                | IDENT name, _ -> Some (Utils.find_var name var_stack), 0
                 | NOT, _ -> (
                     let rhs_opt, consumed = parse_expr rest None in
                     match rhs_opt with
@@ -125,12 +132,12 @@ let parser (lexbuf: token list) (var_stack: Prove.stack_t) : Term.term =
                     let rhs_opt, consumed = parse_expr rest None in
                     match rhs_opt with
                     | None -> raise (Parser_error "XOR : Incomplete assertion")
-                    | Some rhs -> Some (Prove.term_t_xor t rhs), consumed + 1)
+                    | Some rhs -> Some (term_t_xor t rhs), consumed + 1)
                 | EQV, Some t -> (
                     let rhs_opt, consumed = parse_expr rest None in
                     match rhs_opt with
                     | None -> raise (Parser_error "EQV : Incomplete assertion")
-                    | Some rhs -> Some (Prove.term_t_eqv t rhs), consumed + 1)
+                    | Some rhs -> Some (term_t_eqv t rhs), consumed + 1)
                 | _ -> raise (Parser_error "Error")
             in
             if consumed = List.length rest then

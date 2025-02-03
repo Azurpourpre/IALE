@@ -1,19 +1,6 @@
+open Utils;;
 open Why3;;
-exception Invalid_LD;;
 exception Invalid_var of string;;
-
-(* Additional operation on Why3.Term.term *)
-let term_t_eqv (a: Term.term) (b: Term.term) : Term.term =
-  Term.t_or (Term.t_and a b) (Term.t_and (Term.t_not a) (Term.t_not b))
-
-let term_t_xor (a: Term.term) (b: Term.term) : Term.term = 
-  Term.t_and (Term.t_or a b) (Term.t_not (Term.t_and a b))
-
-(* Define a "stack" for storing variables as why3 format *)
-module StrMap = Map.Make(String);;
-type stack_t = Term.lsymbol StrMap.t;;
-
-let find_var (name : string) (stack: stack_t) : Why3.Term.term = Why3.Term.ps_app (StrMap.find name stack) []
 
 (* main code *)
 let transform_var (varlist: Reader.s12_variable list) : stack_t = 
@@ -22,14 +9,7 @@ let transform_var (varlist: Reader.s12_variable list) : stack_t =
   in
   List.fold_left fold_func StrMap.empty varlist 
 
-let rec transform_ld (prgm : Types.component_LD Tree.t) (stack : stack_t) : Term.term =
-  let recurse_children (children : Types.component_LD Tree.t list) : Term.term = Term.t_or_l (List.map (fun e -> transform_ld e stack) children) in
-  match prgm with
-  | Node (Types.LD_LEFT_POWERRAIL, children) -> recurse_children children
-  | Node (Types.LD_CONTACT {input = _; variable = varname; negated = _}, children) -> Term.t_and (Term.ps_app (StrMap.find varname stack) []) (recurse_children children)
-  | Node (Types.LD_COIL {input = _; variable = varname; negated = _}, children) -> term_t_xor (Term.ps_app (StrMap.find varname stack) []) (recurse_children children)
-  | Leaf Types.LD_RIGHT_POWERRAIL _ -> Term.t_false
-  | _ -> raise Invalid_LD
+let transform_ld = Trans_LD.transform_ld
 
 let create_task (prgm: Term.term) (assertion : Term.term) (stack : stack_t) = 
   let task = StrMap.fold (fun _ symbol acc_task : Task.task -> Task.add_param_decl acc_task symbol) stack None in
