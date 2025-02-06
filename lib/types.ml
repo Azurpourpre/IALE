@@ -1,4 +1,4 @@
-(**     IEC variable types      **)
+(**     IEC variable types     **)
 
 type iectype = 
     | BOOL
@@ -129,17 +129,52 @@ let string_of_iectype (t : iectype) : string =
     | ANY_DATE -> "ANY_DATE"
     | POINTER _ -> "POINTER"
 
-(**     LD components       **)
+(**     LD components     **)
+module LD = struct 
+    type component = 
+    | LD_LEFT_POWERRAIL
+    | LD_RIGHT_POWERRAIL of int list
+    | LD_CONTACT of {input: int list; variable: string; negated: bool;}
+    | LD_COIL of {input: int list; variable : string; negated : bool;}
 
-type component_LD = 
-| LD_LEFT_POWERRAIL
-| LD_RIGHT_POWERRAIL of int list
-| LD_CONTACT of {input: int list; variable: string; negated: bool;}
-| LD_COIL of {input: int list; variable : string; negated : bool;}
+    let format (cmp : component) : string = 
+        match cmp with
+        | LD_LEFT_POWERRAIL -> "LD_LEFT_POWERRAIL"
+        | LD_RIGHT_POWERRAIL _ -> "LD_RIGHT_POWERRAIL"
+        | LD_CONTACT {input = _; variable = varname; negated = negval} -> "LD_CONTACT (variable : " ^ varname ^ ", neg : " ^ (string_of_bool negval) ^ ")"
+        | LD_COIL {input = _; variable = varname; negated = negval} -> "LD_COIL (variable : " ^ varname ^ ", neg : " ^ (string_of_bool negval) ^ ")"
+end
+(**     IL AST     **)
 
-let format_LD (cmp : component_LD) : string = 
-    match cmp with
-    | LD_LEFT_POWERRAIL -> "LD_LEFT_POWERRAIL"
-    | LD_RIGHT_POWERRAIL _ -> "LD_RIGHT_POWERRAIL"
-    | LD_CONTACT {input = _; variable = varname; negated = negval} -> "LD_CONTACT (variable : " ^ varname ^ ", neg : " ^ (string_of_bool negval) ^ ")"
-    | LD_COIL {input = _; variable = varname; negated = negval} -> "LD_COIL (variable : " ^ varname ^ ", neg : " ^ (string_of_bool negval) ^ ")"
+module IL = struct 
+    type operator = 
+    | LD of bool
+    | ST of bool
+    | S
+    | R
+    | AND of bool
+    | OR of bool
+    | XOR of bool
+    | NOT
+    | ADD
+    | SUB
+    | MUL
+    | DIV
+    | MOD
+    | GT
+    | GE
+    | EQ
+    | NE
+    | LE
+    | LT
+    | JMP of (bool * bool) (* C modifier, N modifier*)
+
+    type operand =
+    | INT of int
+    | REAL of float
+    | BOOL of bool
+    | VAR of string
+
+    type label = string
+    type expr = label option * operator * operand
+end

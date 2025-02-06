@@ -7,8 +7,9 @@ let () =
   in
 
   let file_data = Xml.parse_file "hello_world.xml" in
-  let ld_func : Types.component_LD Utils.IntMap.t = Reader.read_LD file_data in
-  let stack : Utils.stack_t = Prove.transform_var (Reader.read_variables file_data) in
+  let program = Reader.get_program file_data "hello_world" in
+  let ld_func : Types.LD.component Utils.IntMap.t = Reader.read_LD program in
+  let stack : Utils.stack_t = Prove.transform_var (Reader.read_variables program) in
   let logic : Why3.Term.term = Prove.transform_ld ld_func stack |> List.hd in
   let assertion : Why3.Term.term = create_assertion stack in
   let task : Why3.Task.task = Prove.create_task logic assertion stack in

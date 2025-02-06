@@ -34,5 +34,5 @@ let check_compmap (component_map : string Utils.IntMap.t) : unit =
 let () =
   print_endline "***   TEST XML   ***";;
   let file_data = Xml.parse_file "hello_world.xml" in
-  Reader.read_variables file_data |> check_varlist ;print_endline "Variable corrects !";
-  Utils.IntMap.map Types.format_LD (Reader.read_LD file_data) |> check_compmap; print_endline "LD Reading correct !"
+  Reader.get_program file_data "hello_world" |> Reader.read_variables |> check_varlist ; print_endline "Variable corrects !";
+  Utils.IntMap.map Types.LD.format (Reader.read_LD file_data) |> check_compmap; print_endline "LD Reading correct !"

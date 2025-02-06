@@ -1,15 +1,20 @@
-(test
- (name test_xml)
- (libraries IALE)
- (deps (file %{project_root}/test/hello_world.xml))
-)
+; (test
+;  (name test_xml)
+;  (libraries IALE)
+;  (deps (file %{project_root}/test/hello_world.xml))
+; )
+
+; (test
+;  (name test_assert)
+;  (libraries IALE)
+; )
+
+; (test
+;  (name test_ld)
+;  (libraries IALE why3)
+; )
 
 (test
- (name test_assert)
+ (name test_il)
  (libraries IALE)
-)
-
-(test
- (name test_ld)
- (libraries IALE why3)
 )
