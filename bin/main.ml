@@ -1,4 +1,4 @@
 let () = 
-  let vartype : IALE.Types.iectype = IALE.Types.USINT in
+  let vartype : IALE.Types.M.iectype = IALE.Types.M.USINT in
   print_endline "Hello, World!";
-  if vartype = IALE.Types.USINT then print_endline "USINT" else print_endline "Other"
+  if vartype = IALE.Types.M.USINT then print_endline "USINT" else print_endline "Other"

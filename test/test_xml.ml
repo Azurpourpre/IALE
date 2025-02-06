@@ -1,15 +1,15 @@
 open IALE;;
 exception Error of string
 
-let format_var (var : Reader.s12_variable) : string =
+let format_var (var : Reader.Var.t) : string =
   let name = var.name in
   let address = (match var.address with | Some s -> s | None -> "None") in
   let globalID = (match var.globalID with | Some i -> string_of_int i | None -> "None") in
-  let vartype = Types.string_of_iectype var.vartype in
+  let vartype = Types.M.string_of_iectype var.vartype in
   let initval = (match var.initial_value with | Some s -> s | None -> "None") in
   "(name: " ^ name ^ ", address: " ^ address ^ ", globalID: " ^ globalID ^ ", vartype: " ^ vartype ^ ", initial value: " ^ initval ^ ")"
 
-let rec check_varlist (l: Reader.s12_variable list) =
+let rec check_varlist (l: Reader.Var.t list) =
   (match (List.hd l).name with
   | "O" -> if (format_var (List.hd l)) <> "(name: O, address: None, globalID: None, vartype: BOOL, initial value: None)" then raise (Error "Error in variable checking")
   | "A" -> if (format_var (List.hd l)) <>  "(name: A, address: None, globalID: None, vartype: BOOL, initial value: true)" then raise (Error "Error in variable checking")
@@ -34,5 +34,5 @@ let check_compmap (component_map : string Utils.IntMap.t) : unit =
 let () =
   print_endline "***   TEST XML   ***";;
   let file_data = Xml.parse_file "hello_world.xml" in
-  Reader.get_program file_data "hello_world" |> Reader.read_variables |> check_varlist ; print_endline "Variable corrects !";
-  Utils.IntMap.map Types.LD.format (Reader.read_LD file_data) |> check_compmap; print_endline "LD Reading correct !"
+  Reader.M.get_program file_data "hello_world" |> Reader.Var.read |> check_varlist ; print_endline "Variable corrects !";
+  Utils.IntMap.map Types.LD.format (Reader.LD.read file_data) |> check_compmap; print_endline "LD Reading correct !"

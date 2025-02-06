@@ -13,7 +13,7 @@ type token =
     | RPAREN
     | EOL
 
-    let string_of_token (tok: token) : string = 
+let string_of_token (tok: token) : string = 
     match tok with
     | TRUE -> "1"
     | FALSE -> "0"

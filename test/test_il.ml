@@ -42,6 +42,6 @@ let format_expr ((label_o, operator, operand) : Types.IL.expr) : string =
 let () = 
   print_endline "***   TEST IL   ***";
   let file_data = Xml.parse_file "hello_world.xml" in
-  let program = Reader.get_program file_data "collatz" in
-  let il_func : Types.IL.expr list = Reader.read_IL program in
+  let program = Reader.M.get_program file_data "collatz" in
+  let il_func : Types.IL.expr list = Reader.IL.read program in
   List.iter (fun e -> print_endline (format_expr e)) il_func
