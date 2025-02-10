@@ -1,11 +1,11 @@
-open Utils;;
 open Why3;;
-exception Invalid_var of string;;
 
-let create_task (prgm: Term.term) (assertion : Term.term) (stack : stack_t) = 
-  let task = StrMap.fold (fun _ symbol acc_task : Task.task -> Task.add_param_decl acc_task symbol) stack None in
-  let goal : Decl.prsymbol = Decl.create_prsymbol (Ident.id_fresh "Goal1") in
-  Task.add_prop_decl task Decl.Pgoal goal (Term.t_implies prgm assertion)
+let create_task (prgm: Term.term) (assertion : Term.term) (stack: Utils.stack_t): Task.task = 
+  let blank_task = Bool.use None |> Int.use in
+  let vsymbol_list : Term.vsymbol list = List.map snd (Utils.StrMap.to_list stack) in
+  let goal_term : Term.term = Term.t_forall_close_simp vsymbol_list [] (Term.t_implies prgm assertion) in
+  let goal : Decl.prsymbol = Decl.create_prsymbol (Ident.id_fresh "Goal1") in 
+  Task.add_prop_decl blank_task Decl.Pgoal goal goal_term
 
 let prove_with_any (task: Task.task) = 
   let config : Whyconf.config = Whyconf.init_config None in

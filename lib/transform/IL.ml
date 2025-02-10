@@ -31,11 +31,11 @@ let transform_expr ((_, op, arg) : expr) (stack : stack_t) (result: Term.vsymbol
     | LD n -> transform_operand arg stack |> do_N n |> set_result
     | AND n -> Term.t_and get_result(transform_operand arg stack) |> do_N n |> set_result
     | OR n -> Term.t_or get_result(transform_operand arg stack) |> do_N n |> set_result
-    | ADD -> IntTheory.add get_result(transform_operand arg stack) |> set_result
-    | SUB -> IntTheory.sub get_result(transform_operand arg stack) |> set_result
-    | MUL -> IntTheory.mul get_result(transform_operand arg stack) |> set_result
-    | DIV -> IntTheory.div get_result(transform_operand arg stack) |> set_result
-    | MOD -> IntTheory.modulo get_result(transform_operand arg stack) |> set_result
+    | ADD -> Prove.Int.add get_result(transform_operand arg stack) |> set_result
+    | SUB -> Prove.Int.sub get_result(transform_operand arg stack) |> set_result
+    | MUL -> Prove.Int.mul get_result(transform_operand arg stack) |> set_result
+    | DIV -> Prove.Int.div get_result(transform_operand arg stack) |> set_result
+    | MOD -> Prove.Int.modulo get_result(transform_operand arg stack) |> set_result
     | _ -> raise (Invalid_Operator (Types.IL.string_of_operator op))
     
 

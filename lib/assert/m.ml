@@ -76,12 +76,6 @@ let rec lexer (input : string) : token list =
 
 open Why3;;
 
-let term_t_xor (a: Term.term) (b: Term.term) : Term.term =
-    Term.t_and (Term.t_or a b) (Term.t_not (Term.t_and a b))
-
-let term_t_eqv (a: Term.term) (b: Term.term) : Term.term =
-    Term.t_or (Term.t_and a b) (Term.t_and (Term.t_not a) (Term.t_not b))
-
 let parser (lexbuf: token list) (var_stack: stack_t) : Term.term =
     let exception Parser_error of string in
 
@@ -107,14 +101,14 @@ let parser (lexbuf: token list) (var_stack: stack_t) : Term.term =
         | token :: rest ->
             let (new_ast, consumed) : Term.term option * int = 
                 match token, ast with
-                | TRUE, _ -> Some Term.t_true, 0
-                | FALSE, _ -> Some Term.t_false, 0
+                | TRUE, _ -> Some Term.t_bool_true, 0
+                | FALSE, _ -> Some Term.t_bool_false, 0
                 | IDENT name, _ -> Some (Utils.find_var name var_stack), 0
                 | NOT, _ -> (
                     let rhs_opt, consumed = parse_expr rest None in
                     match rhs_opt with
                     | None -> raise (Parser_error "NOT : Incomplete assertion")
-                    | Some rhs -> (Some (Term.t_not rhs), consumed + 1))
+                    | Some rhs -> (Some (Prove.Bool.notb rhs), consumed + 1))
                 | LPAREN, _ ->
                     let content = in_paren rest in 
                     fst (parse_expr content None), List.length content + 1
@@ -122,22 +116,22 @@ let parser (lexbuf: token list) (var_stack: stack_t) : Term.term =
                     let rhs_opt, consumed = parse_expr rest None in
                     match rhs_opt with
                     | None -> raise (Parser_error "AND : Incomplete assertion")
-                    | Some rhs -> Some (Term.t_and ast_term rhs), consumed + 1)
+                    | Some rhs -> Some (Prove.Bool.andb ast_term rhs), consumed + 1)
                 | OR, Some t -> (
                     let rhs_opt, consumed = parse_expr rest None in
                     match rhs_opt with
                     | None -> raise (Parser_error "OR : Incomplete assertion")
-                    | Some rhs -> Some (Term.t_or t rhs), consumed + 1)
+                    | Some rhs -> Some (Prove.Bool.orb t rhs), consumed + 1)
                 | XOR, Some t -> (
                     let rhs_opt, consumed = parse_expr rest None in
                     match rhs_opt with
                     | None -> raise (Parser_error "XOR : Incomplete assertion")
-                    | Some rhs -> Some (term_t_xor t rhs), consumed + 1)
+                    | Some rhs -> Some (Prove.Bool.xorb t rhs), consumed + 1)
                 | EQV, Some t -> (
                     let rhs_opt, consumed = parse_expr rest None in
                     match rhs_opt with
                     | None -> raise (Parser_error "EQV : Incomplete assertion")
-                    | Some rhs -> Some (term_t_eqv t rhs), consumed + 1)
+                    | Some rhs -> Some (Prove.Bool.eqvb t rhs), consumed + 1)
                 | _ -> raise (Parser_error "Error")
             in
             if consumed = List.length rest then

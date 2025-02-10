@@ -25,3 +25,6 @@ let div (a: Term.term) (b: Term.term) : Term.term =
 let modulo (a: Term.term) (b: Term.term) : Term.term = 
   let mod_func : Term.lsymbol = Theory.ns_find_ls int_theory.th_export ["mod"] in
   Term.t_app_infer mod_func [a;b]
+
+let use (t : Task.task) : Task.task =
+  Task.use_export t int_theory

@@ -3,7 +3,7 @@ open IALE;;
 let () = 
   print_endline "***   TEST LD   ***";
   let create_assertion (stack : Utils.stack_t) : Why3.Term.term =
-      Why3.Term.t_iff (Utils.find_var "O" stack) (Why3.Term.t_and (Why3.Term.t_or (Utils.find_var "A" stack) (Utils.find_var "B" stack)) (Utils.find_var "C" stack))
+      Why3.Term.t_equ (Utils.find_var "O" stack) (Prove.Bool.andb (Prove.Bool.orb (Utils.find_var "A" stack) (Utils.find_var "B" stack)) (Utils.find_var "C" stack))
   in
 
   let file_data = Xml.parse_file "hello_world.xml" in
@@ -12,5 +12,5 @@ let () =
   let stack : Utils.stack_t = Transform.Var.transform (Reader.Var.read program) in
   let logic : Why3.Term.term = Transform.LD.transform ld_func stack |> List.hd in
   let assertion : Why3.Term.term = create_assertion stack in
-  let task : Why3.Task.task = Prove.create_task logic assertion stack in
-  Prove.prove_with_any task
+  let task : Why3.Task.task = Prove.M.create_task logic assertion stack in
+  Prove.M.prove_with_any task

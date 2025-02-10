@@ -11,7 +11,7 @@ let test_lexer =
 let test_parser = 
   (* let exception Parser_invalid in *)
   let input : Assert.M.token list = [Assert.M.LPAREN; Assert.M.TRUE; Assert.M.OR; Assert.M.NOT; Assert.M.FALSE; Assert.M.RPAREN; Assert.M.EQV; Assert.M.IDENT "A0"; Assert.M.XOR; Assert.M.IDENT "bVb"; Assert.M.EOL] in
-  let stack : Utils.stack_t = Utils.StrMap.of_list [("A0", (Why3.Term.create_psymbol (Why3.Ident.id_fresh "A0") [])); ("bVb", (Why3.Term.create_psymbol (Why3.Ident.id_fresh "bVb") []))] in
+  let stack : Utils.stack_t = Utils.StrMap.of_list [("A0", (Why3.Term.create_vsymbol (Why3.Ident.id_fresh "A0") Why3.Ty.ty_bool)); ("bVb", (Why3.Term.create_vsymbol (Why3.Ident.id_fresh "bVb") Why3.Ty.ty_bool))] in
   let assert_term : Why3.Term.term = Assert.M.parser input stack in
   Format.printf "@[%a@]@." Why3.Pretty.print_term assert_term
 
