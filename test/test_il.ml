@@ -1,6 +1,6 @@
 open IALE;;
 
-let format_expr ((label_o, operator, operand) : Types.IL.expr) : string = 
+(* let format_expr ((label_o, operator, operand) : Types.IL.expr) : string = 
   let slabel : string = (
     match label_o with 
     | Some s -> ("label : " ^ s ^ " ; ")
@@ -37,11 +37,13 @@ let format_expr ((label_o, operator, operand) : Types.IL.expr) : string =
     | BOOL b -> "BOOL{" ^ (string_of_bool b) ^ "}"
     | VAR name -> "VAR{" ^ name ^ "}"
   ) in
-  (slabel ^ "operator : " ^ soperator ^ " ; operand : " ^ soperand)
+  (slabel ^ "operator : " ^ soperator ^ " ; operand : " ^ soperand) *)
 
 let () = 
   print_endline "***   TEST IL   ***";
   let file_data = Xml.parse_file "hello_world.xml" in
   let program = Reader.M.get_program file_data "collatz" in
   let il_func : Types.IL.expr list = Reader.IL.read program in
-  List.iter (fun e -> print_endline (format_expr e)) il_func
+  let stack : Utils.stack_t = Transform.Var.transform (Reader.Var.read program) in
+  let why_func : Why3.Term.term = Transform.IL.transform il_func stack in
+  Format.printf "@[formula 1 is:@ %a@]@." Why3.Pretty.print_term why_func 

@@ -28,3 +28,26 @@ type operand =
 
 type label = string
 type expr = label option * operator * operand
+
+let string_of_operator (op: operator) : string =
+    match op with
+    | LD b -> if b then "LDN" else "LD"
+    | ST b -> if b then "STN" else "ST"
+    | S -> "S"
+    | R -> "R"
+    | AND b -> if b then "ANDN" else "AND"
+    | OR b -> if b then "ORN" else "OR"
+    | XOR b -> if b then "XORN" else "XOR"
+    | NOT -> "NOT"
+    | ADD -> "ADD"
+    | SUB -> "SUB"
+    | MUL -> "MUL"
+    | DIV -> "DIV"
+    | MOD -> "MOD"
+    | GT ->  "GT"
+    | GE ->  "GE"
+    | EQ ->  "EQ"
+    | NE ->  "NE"
+    | LE ->  "LE"
+    | LT ->  "LT"
+    | JMP (cmod, nmod) -> if nmod then "JMPNC" else if cmod then "JMPC" else "JMP"

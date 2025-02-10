@@ -28,3 +28,5 @@ type operand =
 
 type label = string
 type expr = label option * operator * operand
+
+val string_of_operator : operator -> string
