@@ -46,6 +46,6 @@ let transform_vartype (t: Types.M.iectype) : Ty.ty =
 
 let transform (varlist: Reader.Var.t list) : stack_t = 
   let fold_func (acc: stack_t) (var: Reader.Var.t) : stack_t =
-    acc |> StrMap.add var.name (Term.create_vsymbol (Ident.id_fresh var.name) (transform_vartype var.vartype))
+    StrMap.add var.name (Term.create_vsymbol (Ident.id_fresh var.name) (transform_vartype var.vartype)) acc
   in
   List.fold_left fold_func StrMap.empty varlist 

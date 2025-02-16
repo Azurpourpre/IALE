@@ -20,33 +20,33 @@ let parser (token_list: (string option * string * string) list) : expr list =
       | Some slabel -> if String.get slabel (String.length slabel - 1) = ':' then Some (String.sub slabel 0 (String.length slabel - 1)) else raise (Invalid_label slabel)
     in
     let operator : operator = match str_operator with
-      | "LD"          -> LD false
-      | "LDN"         -> LD true
-      | "ST"          -> ST false
-      | "STN"         -> ST true
-      | "S"           -> S
-      | "R"           -> R
-      | "AND" | "&"   -> AND false
-      | "ANDN" | "&N" -> AND true 
-      | "OR"          -> OR false
-      | "ORN"         -> OR true
-      | "XOR"         -> XOR false
-      | "XORN"        -> XOR true
-      | "NOT"         -> NOT
-      | "ADD"         -> ADD
-      | "SUB"         -> SUB
-      | "MUL"         -> MUL
-      | "DIV"         -> DIV
-      | "MOD"         -> MOD
-      | "GT"          -> GT
-      | "GE"          -> GE
-      | "EQ"          -> EQ
-      | "NE"          -> NE
-      | "LE"          -> LE
-      | "LT"          -> LT
-      | "JMP"         -> JMP (false, false)
-      | "JMPC"        -> JMP (true, false)
-      | "JMPNC"       -> JMP (true, true)
+      | "LD" | "ld"          -> LD false
+      | "LDN" | "ldn"         -> LD true
+      | "ST" | "st"          -> ST false
+      | "STN" | "stn"         -> ST true
+      | "S" | "s"           -> S
+      | "R" | "r"           -> R
+      | "AND" | "and" | "&"   -> AND false
+      | "ANDN" | "andn" | "&N" -> AND true 
+      | "OR" | "or"          -> OR false
+      | "ORN" | "orn"         -> OR true
+      | "XOR" | "xor"         -> XOR false
+      | "XORN" | "xorn"        -> XOR true
+      | "NOT" | "not"         -> NOT
+      | "ADD" | "add"         -> ADD
+      | "SUB" | "sub"         -> SUB
+      | "MUL" | "mul"         -> MUL
+      | "DIV" | "div"         -> DIV
+      | "MOD" | "mod"         -> MOD
+      | "GT" | "gt"          -> GT
+      | "GE" | "ge"          -> GE
+      | "EQ" | "eq"          -> EQ
+      | "NE" | "ne"          -> NE
+      | "LE" | "le"          -> LE
+      | "LT" | "lt"          -> LT
+      | "JMP" | "jmp"         -> JMP (false, false)
+      | "JMPC" | "jmpc"        -> JMP (true, false)
+      | "JMPNC" | "jmpnc"       -> JMP (true, true)
       | _ -> raise (Invalid_operator str_operator)
     in
     let operand : operand = 

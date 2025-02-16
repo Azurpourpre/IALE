@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <project xmlns="http://www.plcopen.org/xml/tc6_0201" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:ns1="http://www.plcopen.org/xml/tc6_0201">
   <fileHeader companyName="Inconnu" productName="SansNom" productVersion="1" creationDateTime="2025-01-02T16:30:26"/>
-  <contentHeader name="SansNom" modificationDateTime="2025-02-05T15:07:19">
+  <contentHeader name="SansNom" modificationDateTime="2025-02-16T18:00:18">
     <coordinateInfo>
       <fbd>
         <scaling x="10" y="10"/>
@@ -139,55 +139,26 @@
       <pou name="collatz" pouType="program">
         <interface>
           <localVars>
-            <variable name="i">
+            <variable name="a">
               <type>
-                <UINT/>
+                <DINT/>
               </type>
-              <initialValue>
-                <simpleValue value="115"/>
-              </initialValue>
-            </variable>
-            <variable name="an">
-              <type>
-                <ULINT/>
-              </type>
-              <initialValue>
-                <simpleValue value="27"/>
-              </initialValue>
-            </variable>
-            <variable name="an_max">
-              <type>
-                <LINT/>
-              </type>
-              <initialValue>
-                <simpleValue value="0"/>
-              </initialValue>
             </variable>
           </localVars>
         </interface>
         <body>
           <IL>
-            <xhtml:p><![CDATA[loop: LD an
+            <xhtml:p><![CDATA[LD a
 MOD 2
 EQ 0
-JMPC even
-JMP odd
-even: LD an
-DIV 2
-ST an
-JMP check_max
-odd: LD an
+JMPC is_even
+is_odd: LD a
 MUL 3
 ADD 1
-ST an
-check_max: LD an
-LE an_max
-JMPC not_max
-ST an_max
-not_max: LD i
-SUB 1
-GT 0
-JMPC loop]]></xhtml:p>
+JMP end
+is_even: LD a
+DIV 2
+end: ST a]]></xhtml:p>
           </IL>
         </body>
       </pou>

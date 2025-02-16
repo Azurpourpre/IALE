@@ -46,4 +46,4 @@ let () =
   let il_func : Types.IL.expr list = Reader.IL.read program in
   let stack : Utils.stack_t = Transform.Var.transform (Reader.Var.read program) in
   let why_func : Why3.Term.term = Transform.IL.transform il_func stack in
-  Format.printf "@[formula 1 is:@ %a@]@." Why3.Pretty.print_term why_func 
+  Format.printf "@[formula is:@ %a@]@." Why3.Pretty.print_term why_func
