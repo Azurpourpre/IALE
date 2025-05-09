@@ -11,10 +11,10 @@ let format_var (var : Reader.Var.t) : string =
 
 let rec check_varlist (l: Reader.Var.t list) =
   (match (List.hd l).name with
-  | "O" -> if (format_var (List.hd l)) <> "(name: O, address: None, globalID: None, vartype: BOOL, initial value: None)" then raise (Error "Error in variable checking")
-  | "A" -> if (format_var (List.hd l)) <>  "(name: A, address: None, globalID: None, vartype: BOOL, initial value: true)" then raise (Error "Error in variable checking")
-  | "B" -> if (format_var (List.hd l)) <> "(name: B, address: None, globalID: None, vartype: BOOL, initial value: false)" then raise (Error "Error in variable checking")
-  | "C" -> if (format_var (List.hd l)) <> "(name: C, address: None, globalID: None, vartype: BOOL, initial value: None)" then raise (Error "Error in variable checking")
+  | "o" -> if (format_var (List.hd l)) <> "(name: o, address: None, globalID: None, vartype: BOOL, initial value: None)" then raise (Error "Error in variable checking")
+  | "a" -> if (format_var (List.hd l)) <>  "(name: a, address: None, globalID: None, vartype: BOOL, initial value: true)" then raise (Error "Error in variable checking")
+  | "b" -> if (format_var (List.hd l)) <> "(name: b, address: None, globalID: None, vartype: BOOL, initial value: false)" then raise (Error "Error in variable checking")
+  | "c" -> if (format_var (List.hd l)) <> "(name: c, address: None, globalID: None, vartype: BOOL, initial value: None)" then raise (Error "Error in variable checking")
   | _ -> raise (Error ("Too much variables: " ^ format_var (List.hd l)))
   );
   if List.length l > 1 then check_varlist (List.tl l)

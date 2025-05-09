@@ -1,2 +1,3 @@
 _build
 IALE.opam
+lib/*/_*

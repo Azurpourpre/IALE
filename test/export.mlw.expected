@@ -1,0 +1,5 @@
+theory export
+  use bool.Bool
+  let function_test (n : int) (b : bool) (complex_var : (int,bool,int->real)) : int = test function
+    let test2 (r : real) : real ensures { result = false } = ()
+end

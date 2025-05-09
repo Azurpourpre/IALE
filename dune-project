@@ -13,7 +13,7 @@
  (name IALE)
  (synopsis "Industrial Assertion and Logic Extractor")
  (description "A translator for IEC 61131 languages to Why3ML. Primarly Focused on functionnal specification formal verification")
- (depends ocaml xml-light why3 re)
+ (depends ocaml xml-light re)
 )
 
 ; See the complete stanza docs at https://dune.readthedocs.io/en/stable/reference/dune-project/index.html

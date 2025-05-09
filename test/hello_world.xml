@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <project xmlns="http://www.plcopen.org/xml/tc6_0201" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:ns1="http://www.plcopen.org/xml/tc6_0201">
   <fileHeader companyName="Inconnu" productName="SansNom" productVersion="1" creationDateTime="2025-01-02T16:30:26"/>
-  <contentHeader name="SansNom" modificationDateTime="2025-02-16T18:00:18">
+  <contentHeader name="SansNom" modificationDateTime="2025-05-09T17:50:29">
     <coordinateInfo>
       <fbd>
         <scaling x="10" y="10"/>
@@ -20,7 +20,7 @@
       <pou name="hello_world" pouType="program">
         <interface>
           <localVars>
-            <variable name="A">
+            <variable name="a">
               <type>
                 <BOOL/>
               </type>
@@ -28,7 +28,7 @@
                 <simpleValue value="true"/>
               </initialValue>
             </variable>
-            <variable name="B">
+            <variable name="b">
               <type>
                 <BOOL/>
               </type>
@@ -36,12 +36,12 @@
                 <simpleValue value="false"/>
               </initialValue>
             </variable>
-            <variable name="C">
+            <variable name="c">
               <type>
                 <BOOL/>
               </type>
             </variable>
-            <variable name="O">
+            <variable name="o">
               <type>
                 <BOOL/>
               </type>
@@ -71,7 +71,7 @@
               <connectionPointOut>
                 <relPosition x="21" y="10"/>
               </connectionPointOut>
-              <variable>A</variable>
+              <variable>a</variable>
             </contact>
             <contact localId="7" negated="false" width="21" height="20">
               <position x="120" y="120"/>
@@ -85,7 +85,7 @@
               <connectionPointOut>
                 <relPosition x="21" y="10"/>
               </connectionPointOut>
-              <variable>B</variable>
+              <variable>b</variable>
             </contact>
             <contact localId="8" negated="false" width="21" height="20">
               <position x="170" y="100"/>
@@ -107,7 +107,7 @@
               <connectionPointOut>
                 <relPosition x="21" y="10"/>
               </connectionPointOut>
-              <variable>C</variable>
+              <variable>c</variable>
             </contact>
             <coil localId="9" negated="false" width="21" height="20">
               <position x="220" y="100"/>
@@ -121,7 +121,7 @@
               <connectionPointOut>
                 <relPosition x="21" y="10"/>
               </connectionPointOut>
-              <variable>O</variable>
+              <variable>o</variable>
             </coil>
             <rightPowerRail localId="10" width="10" height="40">
               <position x="260" y="90"/>
@@ -139,26 +139,30 @@
       <pou name="collatz" pouType="program">
         <interface>
           <localVars>
-            <variable name="a">
+            <variable name="an">
               <type>
                 <DINT/>
               </type>
+              <initialValue>
+                <simpleValue value="27"/>
+              </initialValue>
             </variable>
           </localVars>
         </interface>
         <body>
           <IL>
-            <xhtml:p><![CDATA[LD a
+            <xhtml:p><![CDATA[LD an
 MOD 2
 EQ 0
 JMPC is_even
-is_odd: LD a
+is_odd: LD an
 MUL 3
 ADD 1
 JMP end
-is_even: LD a
+is_even: LD an
 DIV 2
-end: ST a]]></xhtml:p>
+end: ST an
+]]></xhtml:p>
           </IL>
         </body>
       </pou>

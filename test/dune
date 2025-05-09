@@ -1,22 +1,27 @@
 (test
- (name test_xml)
+ (name t_reader)
+ (libraries IALE xml-light)
+ (deps (file %{project_root}/test/hello_world.xml))
+)
+
+(rule 
+ (target export.mlw)
+ (action (run ./t_export.exe))
+)
+(test
+ (name t_export)
+ (libraries IALE)
+ (action (diff export.mlw.expected export.mlw))
+)
+
+(test
+ (name t_ld)
  (libraries IALE)
  (deps (file %{project_root}/test/hello_world.xml))
 )
 
-(test
- (name test_assert)
- (libraries IALE)
-)
-
-(test
- (name test_ld)
- (libraries IALE why3)
- (deps (file %{project_root}/test/hello_world.xml))
-)
-
-(test
- (name test_il)
- (libraries IALE)
- (deps (file %{project_root}/test/hello_world.xml))
-)
+; (test
+;  (name il)
+;  (libraries IALE)
+;  (deps (file %{project_root}/test/hello_world.xml))
+; )

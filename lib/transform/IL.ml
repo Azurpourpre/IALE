@@ -1,6 +1,4 @@
-open Types.IL;;
-open Utils;;
-open Why3;;
+(* open Types.IL;;
 exception Invalid_Real;;
 exception Invalid_Operator of string;;
 exception Invalid_Operand;;
@@ -107,4 +105,4 @@ let transform (prgm: expr list) (stack: stack_t) : Term.term =
                 Term.t_if cond_value (transform_body (after_label (get_arg_val arg) rest) stack) (transform_body rest stack)
             | _ -> transform_data_stmt stmt result; transform_body rest stack
     in
-    transform_body prgm stack
+    transform_body prgm stack *)
